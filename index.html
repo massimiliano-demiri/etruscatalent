@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Etrusca Talent – Candidati al casting</title>
+<meta name="description" content="Candidati al casting di Etrusca Talent, agenzia di Perugia per hostess, ragazze immagine e promoter.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F6F8; --ink: #1B2433; --red: #B3232F; --red-hover: #8E1A24; --line: #D8DCE3;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; font-size: 16px; line-height: 1.5; }
+  h1, legend { font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", Arial, sans-serif; }
+  header { background: var(--ink); color: #fff; padding: 40px 20px 96px; }
+  .head-inner { max-width: 720px; margin: 0 auto; }
+  .bar { width: 48px; height: 6px; background: var(--red); margin-bottom: 16px; }
+  h1 { margin: 0 0 8px; font-weight: 800; font-size: clamp(2rem, 6vw, 2.75rem); line-height: 1.1; }
+  header p { margin: 0; max-width: 540px; color: #E4E7EC; }
+  main { padding: 0 16px 48px; }
+  .card { max-width: 720px; margin: -64px auto 0; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 28px; box-shadow: 0 2px 8px rgba(27,36,51,.08); }
+  fieldset { border: 0; border-top: 1px solid var(--line); margin: 0 0 24px; padding: 16px 0 0; min-width: 0; }
+  fieldset:first-of-type { border-top: 0; padding-top: 0; }
+  legend { font-weight: 600; font-size: 1.25rem; padding: 0 8px 0 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+  .full { grid-column: 1 / -1; }
+  .field { display: flex; flex-direction: column; min-width: 0; }
+  label { font-weight: 500; margin-bottom: 4px; font-size: .95rem; }
+  .opt { font-weight: 400; color: #5B6577; }
+  .hint { font-size: .85rem; color: #5B6577; margin: 4px 0 0; }
+  input[type=text], input[type=email], input[type=tel], input[type=url], input[type=number], input[type=date], select, textarea {
+    width: 100%; font: inherit; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px;
+  }
+  textarea { min-height: 96px; resize: vertical; }
+  input[type=file] { font: inherit; width: 100%; padding: 8px; border: 1px dashed var(--line); border-radius: 6px; background: var(--bg); }
+  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible {
+    outline: 3px solid var(--red); outline-offset: 2px;
+  }
+  .previews { display: flex; gap: 8px; margin-top: 8px; }
+  .previews img { width: 96px; height: 96px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); }
+  progress { width: 100%; height: 14px; margin-top: 8px; accent-color: var(--red); }
+  .check { display: flex; gap: 10px; align-items: flex-start; margin-top: 8px; }
+  .check input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--red); }
+  .check label { margin: 0; font-weight: 400; }
+  button[type=submit] { width: 100%; font: inherit; font-weight: 600; font-size: 1.05rem; color: #fff; background: var(--red); border: 0; border-radius: 6px; padding: 14px; cursor: pointer; }
+  button[type=submit]:hover:not(:disabled) { background: var(--red-hover); }
+  button[type=submit]:disabled { opacity: .75; cursor: wait; }
+  .msg { margin: 0 0 16px; padding: 12px 14px; border-radius: 6px; border: 1px solid; }
+  .msg.ok { background: #EAF6EE; border-color: #2E7D4F; }
+  .msg.err { background: #FCEBEC; border-color: var(--red); }
+  .hp { position: absolute; left: -9999px; }
+  [hidden] { display: none !important; }
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: 1fr; }
+    .card { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="head-inner">
+    <div class="bar" aria-hidden="true"></div>
+    <h1>Etrusca Talent</h1>
+    <p>Vuoi lavorare come hostess, ragazza immagine o promoter per eventi, fiere e locali? Compila il modulo e candidati al nostro casting a Perugia.</p>
+  </div>
+</header>
+
+<main>
+<div class="card">
+  <div id="messaggio" class="msg" hidden></div>
+
+  <form name="candidatura" method="POST" action="/grazie.html" enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="candidatura">
+    <p class="hp" aria-hidden="true">
+      <label>Non compilare questo campo: <input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label>
+    </p>
+
+    <fieldset>
+      <legend>I tuoi dati</legend>
+      <div class="grid">
+        <div class="field">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" name="nome" autocomplete="given-name" required>
+        </div>
+        <div class="field">
+          <label for="cognome">Cognome</label>
+          <input type="text" id="cognome" name="cognome" autocomplete="family-name" required>
+        </div>
+        <div class="field">
+          <label for="data_nascita">Data di nascita</label>
+          <input type="date" id="data_nascita" name="data_nascita" autocomplete="bday" required>
+        </div>
+        <div class="field">
+          <label for="citta">Città di residenza</label>
+          <input type="text" id="citta" name="citta" autocomplete="address-level2" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="telefono">Telefono</label>
+          <input type="tel" id="telefono" name="telefono" autocomplete="tel" required>
+        </div>
+        <div class="field full">
+          <label for="instagram">Instagram <span class="opt">(facoltativo)</span></label>
+          <input type="text" id="instagram" name="instagram" autocomplete="off" placeholder="@nomeprofilo">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Parametri</legend>
+      <div class="grid">
+        <div class="field">
+          <label for="altezza_cm">Altezza (cm)</label>
+          <input type="number" id="altezza_cm" name="altezza_cm" min="120" max="230" step="1" inputmode="numeric" required>
+        </div>
+        <div class="field">
+          <label for="taglia">Taglia abito</label>
+          <select id="taglia" name="taglia" required>
+            <option value="">Seleziona…</option>
+            <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="scarpe">Numero di scarpe</label>
+          <input type="number" id="scarpe" name="scarpe" min="33" max="46" step="0.5" inputmode="decimal" required>
+        </div>
+        <div class="field">
+          <label for="capelli">Colore e lunghezza capelli</label>
+          <input type="text" id="capelli" name="capelli" placeholder="Es. castani, lunghi" required>
+        </div>
+        <div class="field">
+          <label for="occhi">Colore occhi</label>
+          <input type="text" id="occhi" name="occhi" required>
+        </div>
+        <div class="field">
+          <label for="lingue">Lingue parlate</label>
+          <input type="text" id="lingue" name="lingue" placeholder="Es. italiano, inglese" required>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Esperienza e disponibilità</legend>
+      <div class="grid">
+        <div class="field full">
+          <label for="esperienze">Esperienze precedenti <span class="opt">(facoltativo)</span></label>
+          <textarea id="esperienze" name="esperienze"></textarea>
+        </div>
+        <div class="field full">
+          <label for="disponibilita">Disponibilità</label>
+          <textarea id="disponibilita" name="disponibilita" placeholder="Giorni, orari e zone in cui puoi lavorare" required></textarea>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Foto e video</legend>
+      <div class="grid">
+        <div class="field full">
+          <label for="foto_primo_piano">Foto primo piano</label>
+          <input type="file" id="foto_primo_piano" name="foto_primo_piano" accept="image/*" required data-preview="prev_primo">
+          <div class="previews" id="prev_primo"></div>
+        </div>
+        <div class="field full">
+          <label for="foto_figura_intera">Foto a figura intera</label>
+          <input type="file" id="foto_figura_intera" name="foto_figura_intera" accept="image/*" required data-preview="prev_intera">
+          <div class="previews" id="prev_intera"></div>
+        </div>
+        <div class="field full">
+          <label for="foto_extra">Foto aggiuntiva <span class="opt">(facoltativa)</span></label>
+          <input type="file" id="foto_extra" name="foto_extra" accept="image/*" data-preview="prev_extra">
+          <div class="previews" id="prev_extra"></div>
+        </div>
+        <div class="field full">
+          <label for="video_file">Video di presentazione <span class="opt">(facoltativo, max 100 MB)</span></label>
+          <input type="file" id="video_file" name="video_file" accept="video/*" aria-describedby="video_aiuto">
+          <p class="hint" id="video_aiuto">Dai 30 ai 60 secondi: dì il tuo nome, la tua altezza e le lingue che parli.</p>
+          <progress id="video_progress" max="100" value="0" hidden aria-label="Avanzamento caricamento video"></progress>
+        </div>
+        <div class="field full">
+          <label for="video_link">Oppure link al video <span class="opt">(facoltativo)</span></label>
+          <input type="url" id="video_link" name="video_link" inputmode="url" autocomplete="off" aria-describedby="link_aiuto">
+          <p class="hint" id="link_aiuto">In alternativa al file: Google Drive, YouTube (non in elenco) o WeTransfer.</p>
+        </div>
+        <input type="hidden" id="video_url" name="video_url" value="">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Consensi</legend>
+      <div class="check">
+        <input type="checkbox" id="maggiorenne" name="maggiorenne" value="si" required>
+        <label for="maggiorenne">Dichiaro di avere almeno 18 anni</label>
+      </div>
+      <div class="check">
+        <input type="checkbox" id="privacy" name="privacy" value="si" required>
+        <label for="privacy">Ho letto l'informativa privacy e acconsento al trattamento dei miei dati e delle mie foto da parte di Etrusca Talent, al solo scopo di selezione per eventi. Posso chiederne la cancellazione in qualsiasi momento scrivendo a info@tuodominio.it</label>
+      </div>
+    </fieldset>
+
+    <button type="submit" id="invia">Invia candidatura</button>
+  </form>
+</div>
+</main>
+
+<script>
+(function () {
+  // Nome del tuo account Cloudinary (Dashboard di Cloudinary). Non è un segreto.
+  const CLOUD_NAME = 'IL_TUO_CLOUD_NAME';
+  // Nome dell'upload preset NON FIRMATO creato in Cloudinary. Non è un segreto.
+  const UPLOAD_PRESET = 'IL_TUO_UPLOAD_PRESET';
+  // Dimensione massima del video in MB.
+  const MAX_VIDEO_MB = 100;
+
+  const PHOTO_FIELDS = ['foto_primo_piano', 'foto_figura_intera', 'foto_extra'];
+  const MAX_SIDE = 1600;
+  const JPEG_QUALITY = 0.82;
+
+  const form = document.forms['candidatura'];
+  const btn = document.getElementById('invia');
+  const box = document.getElementById('messaggio');
+  const progress = document.getElementById('video_progress');
+  const BTN_LABEL = btn.textContent;
+
+  function show(kind, text) {
+    box.className = 'msg ' + (kind === 'ok' ? 'ok' : 'err');
+    box.setAttribute('role', kind === 'ok' ? 'status' : 'alert');
+    box.textContent = text;
+    box.hidden = false;
+    box.scrollIntoView({ behavior: 'auto', block: 'center' });
+  }
+
+  function clearPreviews() {
+    form.querySelectorAll('.previews').forEach(function (p) {
+      p.querySelectorAll('img').forEach(function (i) { URL.revokeObjectURL(i.src); });
+      p.innerHTML = '';
+    });
+  }
+
+  // Anteprime delle foto scelte
+  PHOTO_FIELDS.forEach(function (name) {
+    const input = form.elements[name];
+    input.addEventListener('change', function () {
+      const wrap = document.getElementById(input.dataset.preview);
+      wrap.querySelectorAll('img').forEach(function (i) { URL.revokeObjectURL(i.src); });
+      wrap.innerHTML = '';
+      const file = input.files[0];
+      if (!file) return;
+      const img = document.createElement('img');
+      img.alt = 'Anteprima della foto selezionata';
+      img.src = URL.createObjectURL(file);
+      wrap.appendChild(img);
+    });
+  });
+
+  function ageFrom(value) {
+    const d = new Date(value + 'T00:00:00');
+    if (isNaN(d)) return null;
+    const now = new Date();
+    let age = now.getFullYear() - d.getFullYear();
+    const m = now.getMonth() - d.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
+    return age;
+  }
+
+  function loadImage(file) {
+    return new Promise(function (resolve, reject) {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = function () { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('immagine non leggibile')); };
+      img.src = url;
+    });
+  }
+
+  async function compress(file) {
+    try {
+      const img = await loadImage(file);
+      const scale = Math.min(1, MAX_SIDE / Math.max(img.naturalWidth, img.naturalHeight));
+      const w = Math.max(1, Math.round(img.naturalWidth * scale));
+      const h = Math.max(1, Math.round(img.naturalHeight * scale));
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+      const blob = await new Promise(function (res) { canvas.toBlob(res, 'image/jpeg', JPEG_QUALITY); });
+      if (!blob) return null;
+      return blob;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function uploadVideo(file) {
+    return new Promise(function (resolve, reject) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/video/upload');
+      xhr.upload.onprogress = function (e) {
+        if (!e.lengthComputable) return;
+        const pct = Math.round((e.loaded / e.total) * 100);
+        progress.value = pct;
+        btn.textContent = 'Caricamento video ' + pct + '%';
+      };
+      xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            const url = JSON.parse(xhr.responseText).secure_url;
+            if (url) return resolve(url);
+          } catch (e) { /* risposta non valida */ }
+        }
+        reject(new Error('upload video fallito'));
+      };
+      xhr.onerror = function () { reject(new Error('upload video fallito')); };
+      const body = new FormData();
+      body.append('file', file);
+      body.append('upload_preset', UPLOAD_PRESET);
+      xhr.send(body);
+    });
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    box.hidden = true;
+
+    if (!form.reportValidity()) return;
+
+    const age = ageFrom(form.elements['data_nascita'].value);
+    if (age === null || age < 18) {
+      show('err', 'Il casting è riservato a persone maggiorenni.');
+      return;
+    }
+
+    const videoFile = form.elements['video_file'].files[0];
+    if (videoFile && videoFile.size > MAX_VIDEO_MB * 1024 * 1024) {
+      show('err', 'Il video supera i ' + MAX_VIDEO_MB + ' MB. Accorcialo oppure incolla un link nel campo apposito.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Invio in corso…';
+
+    try {
+      const fd = new FormData(form);
+
+      for (const name of PHOTO_FIELDS) {
+        const file = form.elements[name].files[0];
+        if (!file || file.size === 0) continue;
+        const blob = await compress(file);
+        if (blob) {
+          const base = file.name.replace(/\.[^.]+$/, '') || name;
+          fd.set(name, blob, base + '.jpg');
+        }
+      }
+
+      fd.delete('video_file');
+      if (videoFile) {
+        progress.value = 0;
+        progress.hidden = false;
+        const url = await uploadVideo(videoFile);
+        fd.set('video_url', url);
+        btn.textContent = 'Invio in corso…';
+      }
+
+      const res = await fetch('/', { method: 'POST', body: fd });
+      if (!res.ok) throw new Error('invio fallito');
+
+      form.reset();
+      clearPreviews();
+      show('ok', 'Grazie! La tua candidatura è stata inviata. Ti contatteremo se il tuo profilo è in linea con i casting aperti.');
+    } catch (err) {
+      show('err', 'Non è stato possibile inviare la candidatura. Controlla la connessione e riprova tra qualche istante. Se hai caricato un video, puoi anche incollare un link al suo posto.');
+    } finally {
+      progress.hidden = true;
+      btn.disabled = false;
+      btn.textContent = BTN_LABEL;
+    }
+  });
+})();
+</script>
+</body>
+</html>
