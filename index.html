@@ -53,6 +53,24 @@
   .msg.err { background: #FCEBEC; border-color: var(--red); }
   .hp { position: absolute; left: -9999px; }
   [hidden] { display: none !important; }
+  .stepper-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+  .stepper-head p { margin: 0; }
+  #step_label { font-weight: 600; }
+  .stepper-bar { width: 100%; height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; margin-bottom: 24px; }
+  .stepper-bar > span { display: block; height: 100%; width: 0; background: var(--red); transition: width .25s ease; }
+  fieldset.step { display: none; border-top: 0; padding-top: 0; }
+  fieldset.step.active { display: block; }
+  .step-nav { display: flex; gap: 12px; margin-top: 8px; }
+  .btn-secondary { font: inherit; font-weight: 600; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 12px 20px; cursor: pointer; }
+  .btn-secondary:hover { background: var(--bg); }
+  #btn_next { margin-left: auto; }
+  .photo-group { border: 1px solid var(--line); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+  .photo-group h3 { margin: 0 0 4px; font-size: 1.05rem; }
+  .counter { font-weight: 600; }
+  .counter.ok { color: #2E7D4F; }
+  .counter.low { color: var(--red); }
+  .hint.err { color: var(--red); font-weight: 600; }
+  .previews { flex-wrap: wrap; }
   @media (max-width: 560px) {
     .grid { grid-template-columns: 1fr; }
     .card { padding: 20px 16px; }
@@ -78,7 +96,13 @@
       <label>Non compilare questo campo: <input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label>
     </p>
 
-    <fieldset>
+    <div class="stepper-head">
+      <p id="step_label">Passo 1 di 6 — I tuoi dati</p>
+      <p class="opt">45 foto e 2 video richiesti</p>
+    </div>
+    <div class="stepper-bar" aria-hidden="true"><span id="stepper_fill"></span></div>
+
+    <fieldset class="step active" data-step="1">
       <legend>I tuoi dati</legend>
       <div class="grid">
         <div class="field">
@@ -112,7 +136,7 @@
       </div>
     </fieldset>
 
-    <fieldset>
+    <fieldset class="step" data-step="2">
       <legend>Parametri</legend>
       <div class="grid">
         <div class="field">
@@ -145,7 +169,7 @@
       </div>
     </fieldset>
 
-    <fieldset>
+    <fieldset class="step" data-step="3">
       <legend>Esperienza e disponibilità</legend>
       <div class="grid">
         <div class="field full">
@@ -159,40 +183,74 @@
       </div>
     </fieldset>
 
-    <fieldset>
-      <legend>Foto e video</legend>
-      <div class="grid">
-        <div class="field full">
-          <label for="foto_primo_piano">Foto primo piano</label>
-          <input type="file" id="foto_primo_piano" name="foto_primo_piano" accept="image/*" required data-preview="prev_primo">
-          <div class="previews" id="prev_primo"></div>
-        </div>
-        <div class="field full">
-          <label for="foto_figura_intera">Foto a figura intera</label>
-          <input type="file" id="foto_figura_intera" name="foto_figura_intera" accept="image/*" required data-preview="prev_intera">
-          <div class="previews" id="prev_intera"></div>
-        </div>
-        <div class="field full">
-          <label for="foto_extra">Foto aggiuntiva <span class="opt">(facoltativa)</span></label>
-          <input type="file" id="foto_extra" name="foto_extra" accept="image/*" data-preview="prev_extra">
-          <div class="previews" id="prev_extra"></div>
-        </div>
-        <div class="field full">
-          <label for="video_file">Video di presentazione <span class="opt">(facoltativo, max 100 MB)</span></label>
-          <input type="file" id="video_file" name="video_file" accept="video/*" aria-describedby="video_aiuto">
-          <p class="hint" id="video_aiuto">Dai 30 ai 60 secondi: dì il tuo nome, la tua altezza e le lingue che parli.</p>
-          <progress id="video_progress" max="100" value="0" hidden aria-label="Avanzamento caricamento video"></progress>
-        </div>
-        <div class="field full">
-          <label for="video_link">Oppure link al video <span class="opt">(facoltativo)</span></label>
-          <input type="url" id="video_link" name="video_link" inputmode="url" autocomplete="off" aria-describedby="link_aiuto">
-          <p class="hint" id="link_aiuto">In alternativa al file: Google Drive, YouTube (non in elenco) o WeTransfer.</p>
-        </div>
-        <input type="hidden" id="video_url" name="video_url" value="">
+    <fieldset class="step" data-step="4">
+      <legend>Foto (45 richieste)</legend>
+      <p class="hint">Carica tutte le foto richieste, divise per categoria: buona luce naturale, senza filtri pesanti, abbigliamento normale o da lavoro (niente intimo).</p>
+
+      <div class="photo-group">
+        <h3>Viso <span class="opt">(almeno 12 foto)</span></h3>
+        <p class="hint">Frontali, di profilo destro e sinistro, con espressioni diverse (neutra, sorriso).</p>
+        <input type="file" id="foto_viso" name="foto_viso" accept="image/*" multiple required data-min="12" data-preview="prev_viso">
+        <p class="hint"><span id="count_viso" class="counter low">0 / 12 caricate</span></p>
+        <div class="previews" id="prev_viso"></div>
+      </div>
+
+      <div class="photo-group">
+        <h3>Figura intera – look casual <span class="opt">(almeno 12 foto)</span></h3>
+        <p class="hint">In piedi, abbigliamento quotidiano, pose diverse: davanti, dietro, di lato.</p>
+        <input type="file" id="foto_casual" name="foto_casual" accept="image/*" multiple required data-min="12" data-preview="prev_casual">
+        <p class="hint"><span id="count_casual" class="counter low">0 / 12 caricate</span></p>
+        <div class="previews" id="prev_casual"></div>
+      </div>
+
+      <div class="photo-group">
+        <h3>Figura intera – look elegante <span class="opt">(almeno 12 foto)</span></h3>
+        <p class="hint">Abito elegante o completo da hostess, utile per valutare il portamento in tenuta da lavoro.</p>
+        <input type="file" id="foto_elegante" name="foto_elegante" accept="image/*" multiple required data-min="12" data-preview="prev_elegante">
+        <p class="hint"><span id="count_elegante" class="counter low">0 / 12 caricate</span></p>
+        <div class="previews" id="prev_elegante"></div>
+      </div>
+
+      <div class="photo-group">
+        <h3>Dettagli <span class="opt">(almeno 9 foto)</span></h3>
+        <p class="hint">Mani, capelli, scarpe, accessori, un primo piano ravvicinato del sorriso.</p>
+        <input type="file" id="foto_dettagli" name="foto_dettagli" accept="image/*" multiple required data-min="9" data-preview="prev_dettagli">
+        <p class="hint"><span id="count_dettagli" class="counter low">0 / 9 caricate</span></p>
+        <div class="previews" id="prev_dettagli"></div>
       </div>
     </fieldset>
 
-    <fieldset>
+    <fieldset class="step" data-step="5">
+      <legend>Video (2 richiesti)</legend>
+      <div class="grid">
+        <div class="field full">
+          <label for="video_presentazione_file">Video di presentazione <span class="opt">(obbligatorio, max 100 MB)</span></label>
+          <input type="file" id="video_presentazione_file" name="video_presentazione_file" accept="video/*" aria-describedby="video_presentazione_aiuto">
+          <p class="hint" id="video_presentazione_aiuto">Dai 30 ai 60 secondi: dì il tuo nome, la tua città e le lingue che parli.</p>
+          <progress id="video_presentazione_progress" max="100" value="0" hidden aria-label="Avanzamento caricamento video di presentazione"></progress>
+        </div>
+        <div class="field full">
+          <label for="video_presentazione_link">Oppure link al video <span class="opt">(in alternativa al file)</span></label>
+          <input type="url" id="video_presentazione_link" name="video_presentazione_link" inputmode="url" autocomplete="off">
+        </div>
+        <input type="hidden" id="video_presentazione_url" name="video_presentazione_url" value="">
+
+        <div class="field full">
+          <label for="video_portamento_file">Video portamento <span class="opt">(obbligatorio, max 100 MB)</span></label>
+          <input type="file" id="video_portamento_file" name="video_portamento_file" accept="video/*" aria-describedby="video_portamento_aiuto">
+          <p class="hint" id="video_portamento_aiuto">Intimo: cammina verso la telecamera, girati e allontanati, come in un catwalk test.</p>
+          <progress id="video_portamento_progress" max="100" value="0" hidden aria-label="Avanzamento caricamento video portamento"></progress>
+        </div>
+        <div class="field full">
+          <label for="video_portamento_link">Oppure link al video <span class="opt">(in alternativa al file)</span></label>
+          <input type="url" id="video_portamento_link" name="video_portamento_link" inputmode="url" autocomplete="off">
+        </div>
+        <input type="hidden" id="video_portamento_url" name="video_portamento_url" value="">
+      </div>
+      <p class="hint err" id="video_error" hidden></p>
+    </fieldset>
+
+    <fieldset class="step" data-step="6">
       <legend>Consensi</legend>
       <div class="check">
         <input type="checkbox" id="maggiorenne" name="maggiorenne" value="si" required>
@@ -200,11 +258,15 @@
       </div>
       <div class="check">
         <input type="checkbox" id="privacy" name="privacy" value="si" required>
-        <label for="privacy">Ho letto l'informativa privacy e acconsento al trattamento dei miei dati e delle mie foto da parte di Etrusca Talent, al solo scopo di selezione per eventi. Posso chiederne la cancellazione in qualsiasi momento scrivendo a info@tuodominio.it</label>
+        <label for="privacy">Ho letto l'informativa privacy e acconsento al trattamento dei miei dati e delle mie foto da parte di Etrusca Talent, al solo scopo di selezione per eventi. Posso chiederne la cancellazione in qualsiasi momento scrivendo a etruscatalent@proton.me</label>
       </div>
     </fieldset>
 
-    <button type="submit" id="invia">Invia candidatura</button>
+    <div class="step-nav">
+      <button type="button" id="btn_back" class="btn-secondary" hidden>Indietro</button>
+      <button type="button" id="btn_next" class="btn-secondary">Avanti</button>
+      <button type="submit" id="invia" hidden>Invia candidatura</button>
+    </div>
   </form>
 </div>
 </main>
@@ -212,21 +274,43 @@
 <script>
 (function () {
   // Nome del tuo account Cloudinary (Dashboard di Cloudinary). Non è un segreto.
-  const CLOUD_NAME = 'IL_TUO_CLOUD_NAME';
+  const CLOUD_NAME = 'dbsmevlfr';
   // Nome dell'upload preset NON FIRMATO creato in Cloudinary. Non è un segreto.
-  const UPLOAD_PRESET = 'IL_TUO_UPLOAD_PRESET';
-  // Dimensione massima del video in MB.
+  const UPLOAD_PRESET = 'etrusca_casting';
+  // Dimensione massima di ogni video in MB.
   const MAX_VIDEO_MB = 100;
-
-  const PHOTO_FIELDS = ['foto_primo_piano', 'foto_figura_intera', 'foto_extra'];
   const MAX_SIDE = 1600;
   const JPEG_QUALITY = 0.82;
+  const MAX_PREVIEWS = 16;
+
+  // Le 4 categorie di foto richieste: 12 + 12 + 12 + 9 = 45 in totale.
+  const PHOTO_GROUPS = [
+    { name: 'foto_viso', min: 12 },
+    { name: 'foto_casual', min: 12 },
+    { name: 'foto_elegante', min: 12 },
+    { name: 'foto_dettagli', min: 9 }
+  ];
+  const TOTAL_PHOTOS = PHOTO_GROUPS.reduce(function (sum, g) { return sum + g.min; }, 0);
+
+  // I 2 video richiesti: ciascuno come file oppure come link esterno.
+  const VIDEOS = [
+    { file: 'video_presentazione_file', link: 'video_presentazione_link', url: 'video_presentazione_url', progress: 'video_presentazione_progress', label: 'video di presentazione' },
+    { file: 'video_portamento_file', link: 'video_portamento_link', url: 'video_portamento_url', progress: 'video_portamento_progress', label: 'video portamento' }
+  ];
 
   const form = document.forms['candidatura'];
   const btn = document.getElementById('invia');
+  const btnNext = document.getElementById('btn_next');
+  const btnBack = document.getElementById('btn_back');
   const box = document.getElementById('messaggio');
-  const progress = document.getElementById('video_progress');
+  const stepLabel = document.getElementById('step_label');
+  const stepFill = document.getElementById('stepper_fill');
+  const videoError = document.getElementById('video_error');
   const BTN_LABEL = btn.textContent;
+
+  const steps = Array.from(form.querySelectorAll('fieldset.step'));
+  const STEP_TITLES = ['I tuoi dati', 'Parametri', 'Esperienza e disponibilità', 'Foto (45 richieste)', 'Video (2 richiesti)', 'Consensi'];
+  let current = 0;
 
   function show(kind, text) {
     box.className = 'msg ' + (kind === 'ok' ? 'ok' : 'err');
@@ -243,20 +327,91 @@
     });
   }
 
-  // Anteprime delle foto scelte
-  PHOTO_FIELDS.forEach(function (name) {
-    const input = form.elements[name];
-    input.addEventListener('change', function () {
-      const wrap = document.getElementById(input.dataset.preview);
-      wrap.querySelectorAll('img').forEach(function (i) { URL.revokeObjectURL(i.src); });
-      wrap.innerHTML = '';
-      const file = input.files[0];
-      if (!file) return;
+  function updateStepUI() {
+    steps.forEach(function (s, i) { s.classList.toggle('active', i === current); });
+    stepLabel.textContent = 'Passo ' + (current + 1) + ' di ' + steps.length + ' — ' + STEP_TITLES[current];
+    stepFill.style.width = Math.round(((current + 1) / steps.length) * 100) + '%';
+    btnBack.hidden = current === 0;
+    const isLast = current === steps.length - 1;
+    btnNext.hidden = isLast;
+    btn.hidden = !isLast;
+    box.hidden = true;
+    form.closest('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function validateVideos() {
+    videoError.hidden = true;
+    for (const v of VIDEOS) {
+      const file = form.elements[v.file].files[0];
+      const link = form.elements[v.link].value.trim();
+      if (!file && !link) {
+        videoError.textContent = 'Carica il file oppure incolla un link per il ' + v.label + '.';
+        videoError.hidden = false;
+        form.elements[v.file].focus();
+        return false;
+      }
+      if (file && file.size > MAX_VIDEO_MB * 1024 * 1024) {
+        videoError.textContent = 'Il file per il ' + v.label + ' supera i ' + MAX_VIDEO_MB + ' MB: accorcialo oppure incolla un link.';
+        videoError.hidden = false;
+        form.elements[v.file].focus();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function validateStep(index) {
+    const controls = steps[index].querySelectorAll('input, select, textarea');
+    for (const el of controls) {
+      if (el.type === 'hidden') continue;
+      if (!el.checkValidity()) {
+        el.reportValidity();
+        el.focus();
+        return false;
+      }
+    }
+    if (steps[index].dataset.step === '5') return validateVideos();
+    return true;
+  }
+
+  btnNext.addEventListener('click', function () {
+    if (!validateStep(current)) return;
+    current = Math.min(current + 1, steps.length - 1);
+    updateStepUI();
+  });
+  btnBack.addEventListener('click', function () {
+    current = Math.max(current - 1, 0);
+    updateStepUI();
+  });
+  updateStepUI();
+
+  // Conteggio minimo per categoria + anteprime delle foto scelte
+  function refreshGroup(group) {
+    const input = form.elements[group.name];
+    const n = input.files.length;
+    const counter = document.getElementById('count_' + group.name.replace('foto_', ''));
+    if (counter) {
+      counter.textContent = n + ' / ' + group.min + ' caricate';
+      counter.classList.toggle('ok', n >= group.min);
+      counter.classList.toggle('low', n < group.min);
+    }
+    input.setCustomValidity(n < group.min ? 'Carica almeno ' + group.min + ' foto per questa categoria (ne hai selezionate ' + n + ').' : '');
+
+    const wrap = document.getElementById(input.dataset.preview);
+    wrap.querySelectorAll('img').forEach(function (i) { URL.revokeObjectURL(i.src); });
+    wrap.innerHTML = '';
+    Array.from(input.files).slice(0, MAX_PREVIEWS).forEach(function (file) {
       const img = document.createElement('img');
-      img.alt = 'Anteprima della foto selezionata';
+      img.alt = 'Anteprima foto';
       img.src = URL.createObjectURL(file);
       wrap.appendChild(img);
     });
+  }
+
+  PHOTO_GROUPS.forEach(function (group) {
+    const input = form.elements[group.name];
+    input.addEventListener('change', function () { refreshGroup(group); });
+    refreshGroup(group);
   });
 
   function ageFrom(value) {
@@ -299,15 +454,15 @@
     }
   }
 
-  function uploadVideo(file) {
+  function uploadVideo(file, progressEl, label) {
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', 'https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/video/upload');
       xhr.upload.onprogress = function (e) {
         if (!e.lengthComputable) return;
         const pct = Math.round((e.loaded / e.total) * 100);
-        progress.value = pct;
-        btn.textContent = 'Caricamento video ' + pct + '%';
+        progressEl.value = pct;
+        btn.textContent = 'Caricamento ' + label + ' ' + pct + '%';
       };
       xhr.onload = function () {
         if (xhr.status >= 200 && xhr.status < 300) {
@@ -330,17 +485,18 @@
     e.preventDefault();
     box.hidden = true;
 
-    if (!form.reportValidity()) return;
+    // Rivalida ogni step (nel caso l'utente sia tornato indietro e abbia svuotato un campo).
+    for (let i = 0; i < steps.length; i++) {
+      if (!validateStep(i)) {
+        current = i;
+        updateStepUI();
+        return;
+      }
+    }
 
     const age = ageFrom(form.elements['data_nascita'].value);
     if (age === null || age < 18) {
       show('err', 'Il casting è riservato a persone maggiorenni.');
-      return;
-    }
-
-    const videoFile = form.elements['video_file'].files[0];
-    if (videoFile && videoFile.size > MAX_VIDEO_MB * 1024 * 1024) {
-      show('err', 'Il video supera i ' + MAX_VIDEO_MB + ' MB. Accorcialo oppure incolla un link nel campo apposito.');
       return;
     }
 
@@ -350,23 +506,32 @@
     try {
       const fd = new FormData(form);
 
-      for (const name of PHOTO_FIELDS) {
-        const file = form.elements[name].files[0];
-        if (!file || file.size === 0) continue;
-        const blob = await compress(file);
-        if (blob) {
-          const base = file.name.replace(/\.[^.]+$/, '') || name;
-          fd.set(name, blob, base + '.jpg');
+      // Comprime e allega le 45 foto, categoria per categoria.
+      let done = 0;
+      for (const group of PHOTO_GROUPS) {
+        const input = form.elements[group.name];
+        const files = Array.from(input.files);
+        fd.delete(group.name);
+        for (const file of files) {
+          const blob = await compress(file);
+          done++;
+          btn.textContent = 'Comprimo le foto… ' + done + ' / ' + TOTAL_PHOTOS;
+          const base = file.name.replace(/\.[^.]+$/, '') || group.name;
+          fd.append(group.name, blob || file, base + (blob ? '.jpg' : ''));
         }
       }
 
-      fd.delete('video_file');
-      if (videoFile) {
-        progress.value = 0;
-        progress.hidden = false;
-        const url = await uploadVideo(videoFile);
-        fd.set('video_url', url);
-        btn.textContent = 'Invio in corso…';
+      // Carica i 2 video (quelli inviati come file); chi ha incollato un link lascia l'URL già nel form.
+      for (const v of VIDEOS) {
+        const file = form.elements[v.file].files[0];
+        fd.delete(v.file);
+        if (!file) continue;
+        const progressEl = document.getElementById(v.progress);
+        progressEl.value = 0;
+        progressEl.hidden = false;
+        const url = await uploadVideo(file, progressEl, v.label);
+        fd.set(v.url, url);
+        progressEl.hidden = true;
       }
 
       const res = await fetch('/', { method: 'POST', body: fd });
@@ -374,11 +539,14 @@
 
       form.reset();
       clearPreviews();
+      PHOTO_GROUPS.forEach(refreshGroup);
+      current = 0;
+      updateStepUI();
       show('ok', 'Grazie! La tua candidatura è stata inviata. Ti contatteremo se il tuo profilo è in linea con i casting aperti.');
     } catch (err) {
       show('err', 'Non è stato possibile inviare la candidatura. Controlla la connessione e riprova tra qualche istante. Se hai caricato un video, puoi anche incollare un link al suo posto.');
     } finally {
-      progress.hidden = true;
+      VIDEOS.forEach(function (v) { document.getElementById(v.progress).hidden = true; });
       btn.disabled = false;
       btn.textContent = BTN_LABEL;
     }
